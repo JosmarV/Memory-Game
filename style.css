@@ -5,15 +5,35 @@
 }
 body {
     background-color: rgb(19, 18, 18);
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
+    color: #FBF6C8;
+    font-family: 'United', sans-serif;
+    font-size: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin: 40px 0;
 }
+/* Font for the game title */
+@font-face {
+    font-family: 'CreamySugar';
+    src: url('./fonts/CreamySugar-gxnGR.ttf') format('truetype');
+}
+/* Font for the game body */
+@font-face {
+    font-family: 'United';
+    src: url('./fonts/United-lgZww.ttf') format('truetype');
+}
 
+h1 {
+    font-family: 'CreamySugar', sans-serif;
+    font-size: 4rem;
+    text-align: center;
+    color: #97C144;
+}
+h1 span {
+    color: #FBF6C8;
+}
 .main-container {
     display: flex;
     flex-direction: column;
@@ -24,7 +44,7 @@ body {
 
 .board {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(6, 1fr); /* Aqui se asigna el numero de columnas */ 
     gap: 20px;
     perspective: 1000px;
 }
@@ -71,7 +91,7 @@ body {
 
 .score {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 100%;
     align-items: center;
 }
@@ -90,6 +110,33 @@ body {
     height: 20px;
 }
 
+.btn-start {
+    background-color: #97C144;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: auto 0;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-start:hover {
+    box-shadow: 1px 5px 9px 0px rgba(0, 0, 0, 0.7);
+    background-color: #85A737;
+}
+
+.score .stats {
+    display: flex;
+    width: 200px;
+    flex-direction: row;
+    gap: 20px;
+}
+.score .actions-buttons {
+    display: flex;
+    gap: 20px;
+}
+
 .disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -97,4 +144,64 @@ body {
 
 .display-none {
     display: none;
+}
+
+.winning-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1000;
+}
+
+.visible {
+    display: flex;
+}
+
+.winning-screen h2 {
+    margin-bottom: 10px;
+}
+
+.winning-screen p {
+    margin: 5px 0;
+    font-size: 18px;
+}
+
+.winning-screen p span {
+    font-weight: bold;
+}
+
+.winning-screen button {
+    margin-top: 10px;
+    background-color: #97C144;
+    color: #FBF6C8;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-shadow: 2px 1px 2px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.winning-screen button:hover {
+    background-color: #85A737;
+}
+
+.winning-screen img {
+    width: 100px;
+    height: 100px;
+    margin-top: 10px;
+    border-radius: 50%;
+    margin-bottom: 10px;
 }

@@ -1,8 +1,37 @@
+/**
+ * Este es un juego de memoria donde debes encontrar pares de cartas.
+ * El juego se inicia al hacer clic en el botón "Iniciar".
+ * Cada carta tiene una imagen en su parte trasera y al hacer clic se voltea para mostrar la imagen.
+ * Si dos cartas volteadas coinciden, permanecen visibles; de lo contrario, se vueltean de nuevo.
+ * El juego registra el número de intentos y el tiempo transcurrido.
+ * Puedes pausar y reanudar el juego, así como reiniciarlo.
+ */
+
 // Variables globales
-let isProcessing = false;
-let timerId = null;
-let gameEnded = false;
+const INITIAL_GAME_STATE = {
+    isProcessing: false,
+    isPaused: false,
+    timerId: null,
+    gameEnded: false,
+    attempts: 0,
+}
+let gameState = {...INITIAL_GAME_STATE}; // Estado del juego
 // startGame()  descomentar para iniciar el juego al cargar la pagina
+
+// Elementos del DOM
+const board = document.getElementById('board')
+const boardAttempts = document.getElementById('attempts')
+const timeElement = document.getElementById('time')
+// Botones de control
+const startButton = document.getElementById('start')
+const resetButton = document.getElementById('reset')
+const pauseButton = document.getElementById('pause')
+const resumeButton = document.getElementById('resume')
+const playAgainButton = document.getElementById('play-again')
+const statsElement = document.getElementById('stats')
+const winningScreen = document.getElementsByClassName('winning-screen')[0];
+
+// -- Funciones de utilidad --
 
 function shuffle (array) { // Funcion para barajear usando el algoritmo de fisher-yates
     for (let i = array.length - 1; i > 0; i--) {
@@ -11,33 +40,7 @@ function shuffle (array) { // Funcion para barajear usando el algoritmo de fishe
     }
 }
 
-function addToElement (array) {
-    let htmlElement = '';
-    for (let i = 0; i < array.length; i++) {
-        htmlElement += `<div class='card' onClick='handleClick(this)'>
-            <div class='front'><img src='assets/back_card.png' alt='card back' /></div>
-            <div class='back'><img src=${array[i].image} alt=${array[i].id} /></div>
-        </div>`;
-    }
-    return htmlElement
-}
-
-function updateAttempts () { // Funcion para actualizar el marcador de intentos
-    const attempts = document.getElementById('attempts')
-    attempts.textContent = parseInt(attempts.textContent) + 1
-}
-
-function updateTime () { // Funcion para actualizar el marcador de tiempo
-    const timeElement = document.getElementById('time');
-
-    if (timerId) {
-        clearTimeout(timerId) // Limpiar el timeout anterior si existe
-    }
-    timerId = setTimeout(updateTime, 1000) // Llamada recursiva cada segundo
-    
-    // Incrementar el tiempo en 1 segundo
-    timeElement.textContent = parseInt(timeElement.textContent) + 1
-}
+// -- Funciones de Inicialización y Renderizado del tablero --
 
 function createGameBoard () { // Funcion para generar el tablero
     const pair1 = [
@@ -56,15 +59,41 @@ function createGameBoard () { // Funcion para generar el tablero
     return cards
 }
 
+function addToElement (array) {
+    let htmlElement = '';
+    for (let i = 0; i < array.length; i++) {
+        htmlElement += `<div class='card' onClick='handleClick(this)'>
+            <div class='front'><img src='assets/back_card.png' alt='card back' /></div>
+            <div class='back'><img src=${array[i].image} alt=${array[i].id} /></div>
+        </div>`;
+    }
+    return htmlElement
+}
+
+// -- Funciones del Temporizador --
+
+function updateTime () { // Funcion para actualizar el marcador de tiempo
+    // Incrementar el tiempo en 1 segundo
+    timeElement.textContent = parseInt(timeElement.textContent) + 1
+}
+
+function startTimer () { // Funcion para iniciar el temporizador
+    if (gameState.timerId) {
+        clearInterval(gameState.timerId); // Limpiar el intervalo si ya existe
+    }
+    gameState.timerId = setInterval(updateTime, 1000); // Iniciar el temporizador
+}
+
+// -- Lógica Principal del Juego --
+
 function handleClick (event) { // Evento click en cartas
     const clickedCard = event;
-    const board = document.getElementById('board')
     const allElements = board.querySelectorAll('div.card');
 
-    if (isProcessing || clickedCard.classList.contains('rotate') || clickedCard.classList.contains('found')) {
+    if (gameState.isProcessing || clickedCard.classList.contains('rotate') || clickedCard.classList.contains('found')) {
         return;
     }
-    if (pauseButton.disabled === true) {
+    if (gameState.isPaused) { // Verificar si el juego está pausado
         alert('El juego está en pausa. Por favor, reanuda el juego para continuar');
         return;
     }
@@ -76,17 +105,6 @@ function handleClick (event) { // Evento click en cartas
         const updatedRotatedElements = identifyRotatedElements(allElements)
         checkPairs(updatedRotatedElements)
         confirmVictory(allElements)
-    }
-}
-
-function confirmVictory (allElements) {
-    const foundElements = Array.from(allElements).filter(element => element.classList.contains('found'));
-    if (foundElements.length === allElements.length) {
-        setTimeout(() => {
-            alert('¡Felicidades! Has encontrado todos los pares.');
-            gameEnded = true; // Marcar el juego como finalizado
-            pauseGame(); // Pausar el juego al completar
-        }, 500);
     }
 }
 
@@ -116,70 +134,131 @@ function checkPairs (rotatedElements) { // Verificar pares
             }
             else {
                 console.log('sigue buscando')
-                isProcessing = true
+                gameState.isProcessing = true
                 setTimeout(() => {
                     rotatedElements[0].classList.remove('rotate')
                     rotatedElements[1].classList.remove('rotate')
-                    isProcessing = false
+                    gameState.isProcessing = false
                 },1000)
             }
         }
     }
 }
 
+function updateAttempts () { // Funcion para actualizar el marcador de intentos
+    boardAttempts.textContent = gameState.attempts + 1
+    gameState.attempts += 1 // Incrementar el contador de intentos
+}
+
+
+function confirmVictory (allElements) {
+    const foundElements = Array.from(allElements).filter(element => element.classList.contains('found'));
+    if (foundElements.length === allElements.length) {
+        setTimeout(() => {
+            // alert('¡Felicidades! Has encontrado todos los pares.');
+            const finalAttempts = document.getElementById('attempts').textContent;
+            const finalTime = document.getElementById('time').textContent;
+            gameState.gameEnded = true; // Marcar el juego como finalizado
+            pauseGame(); // Pausar el juego al completar
+            winningScreen.querySelector('#final-attempts').textContent = finalAttempts;
+            winningScreen.querySelector('#final-time').textContent = finalTime;
+            winningScreen.classList.add('visible');
+        }, 500);
+    }
+}
+
 function startGame () { // Funcion para iniciar el juego
-    if (gameEnded === true) { // Verificar si el juego ya ha terminado
-        resetScore(); // Reiniciar el marcador al finalizar el juego
-        startButton.disabled = false; // Habilitar el botón de inicio para reiniciar el juego
-        resetButton.classList.add('display-none'); // Ocultar el botón de reinicio
-        pauseButton.classList.add('display-none'); // Ocultar el botón de pausa
+    if (gameState.gameEnded === true) { // Verificar si el juego ya ha terminado
+        resetGame(); // Reiniciar el marcador al finalizar el juego
+        pauseButton.disabled = false 
+        gameState.gameEnded = false; // Reiniciar el estado del juego
     }
     boardElement = createGameBoard()
     const elements = addToElement(boardElement)
-    const board = document.getElementById('board')
     board.innerHTML = elements
-    updateTime() // Iniciar el marcador de tiempo
-}
+    gameState.isProcessing = false // Reiniciar el estado de procesamiento
+    startButton.disabled = true // Deshabilitar el botón de inicio para evitar múltiples inicios
+    startButton.classList.add('display-none') // Ocultar el botón de inicio
+    startTimer() // Iniciar el marcador de tiempo
 
-function resetScore () { // Funcion para reiniciar el marcador
-    const attempts = document.getElementById('attempts')
-    attempts.textContent = 0
-    if (timerId) {
-        clearTimeout(timerId) // Limpiar el timeout del marcador de tiempo
-    }
-    const timeElement = document.getElementById('time');
-    timeElement.textContent = 0 // Reiniciar el marcador de tiempo
-}
-
-const resetButton = document.getElementById('reset')
-resetButton.addEventListener('click', () => {
-    resetScore()
-    startGame()
     pauseButton.disabled = false // Habilitar el botón de pausa
+    resumeButton.disabled = false // Habilitar el botón de reanudar
+    statsElement.classList.add('stats') // Añadir clase de estadísticas
+    resetButton.classList.remove('display-none') // Mostrar el botón de reinicio
+    pauseButton.classList.remove('display-none') // Mostrar el botón de pausa
+    resumeButton.classList.remove('display-none') // Mostrar el botón de reanudar
+}
+
+function resetGame () { // Funcion para reiniciar el marcador
+    gameState = {...INITIAL_GAME_STATE} // Reiniciar el estado del juego
+    if (gameState.timerId) {
+        clearInterval(gameState.timerId) // Limpiar el intervalo del marcador de tiempo
+        gameState.timerId = null // Reiniciar el ID del temporizador
+    }
+    if (gameState.gameEnded) {
+        winningScreen.classList.remove('visible'); // Ocultar la pantalla de victoria
+    }
+    board.innerHTML = '' // Limpiar el tablero
+    startButton.disabled = false // Habilitar el botón de inicio
+    pauseButton.disabled = true // Deshabilitar el botón de pausa
+    resumeButton.disabled = true // Deshabilitar el botón de reanudar
+    boardAttempts.textContent = 0 // Reiniciar el marcador de intentos
+    timeElement.textContent = 0 // Reiniciar el marcador de tiempo
+    startButton.classList.remove('display-none') // Mostrar el botón de inicio
+    pauseButton.classList.add('display-none') // Ocultar el botón de pausa
+    resumeButton.classList.add('display-none') // Ocultar el botón de reanudar
+    resetButton.classList.add('display-none') // Ocultar el botón de reinicio
+    statsElement.classList.remove('stats') // Eliminar clase de estadísticas
+}
+
+function pauseGame () { // Funcion para pausar el juego
+    if (gameState.timerId) {
+        clearInterval(gameState.timerId) // Detener el marcador de tiempo
+        gameState.isPaused = true // Marcar el juego como pausado
+        gameState.timerId = null // Reiniciar el ID del temporizador
+        pauseButton.disabled = true // Deshabilitar el botón de pausa para evitar múltiples pausas
+        resumeButton.disabled = false // Habilitar el botón de reanudar
+        resetButton.disabled = false // Habilitar el botón de inicio para reiniciar el juego
+        console.log('Juego pausado')
+    }
+}
+
+function resumeGame () { // Funcion para reanudar el juego
+    if (gameState.gameEnded === false && gameState.isPaused === true) { // Verificar si el juego no ha terminado y está pausado
+        startTimer()
+        gameState.isPaused = false // Marcar el juego como no pausado
+        pauseButton.disabled = false // Habilitar el botón de pausa
+        resumeButton.disabled = true // Deshabilitar el botón de reanudar para evitar múltiples reanudaciones
+    }
+}
+
+// -- Eventos de los botones --
+
+resetButton.addEventListener('click', () => {
+    resetGame()
+    startGame() // Reiniciar el juego al hacer clic en el botón de reinicio
 })
 
-
-const pauseButton = document.getElementById('pause')
 pauseButton.addEventListener('click', () => {
     pauseGame()
 })
 
-const startButton = document.getElementById('start')
-startButton.addEventListener('click', () => {   
-    if (!isProcessing) {
+startButton.addEventListener('click', () => {
+    if (!gameState.isProcessing) {
         startGame()
-        startButton.disabled = true // Deshabilitar el botón de inicio para evitar múltiples inicios
-        resetButton.classList.remove('display-none') // Mostrar el botón de reinicio
-        pauseButton.classList.remove('display-none') // Mostrar el botón de pausa
-        pauseButton.disabled = false // Habilitar el botón de pausa
     }
 })
 
-function pauseGame () { // Funcion para pausar el juego
-    if (timerId) {
-        pauseButton.disabled = true // Deshabilitar el botón de pausa para evitar múltiples pausas
-        clearTimeout(timerId) // Detener el marcador de tiempo
-        timerId = null // Reiniciar el ID del temporizador
-        startButton.disabled = false // Habilitar el botón de inicio para reiniciar el juego
-    }
-}
+resumeButton.addEventListener('click', () => {
+    resumeGame()
+})
+
+playAgainButton.addEventListener('click', () => {
+    const winningScreen = document.getElementsByClassName('winning-screen')[0];
+    winningScreen.classList.remove('visible');
+    startGame();
+});
+
+
+// Actualmente tengo 241 lineas de código, puede reducir el código eliminando comentarios innecesarios 
+// o simplificando funciones, pero es importante mantener la claridad y legibilidad del código.

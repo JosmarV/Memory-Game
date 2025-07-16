@@ -103,6 +103,7 @@ h1 span {
     padding: 4px 8px;
     border-radius: 6px;
     cursor: pointer;
+    transition: all 0.3s ease-in-out;
 }
 
 .btn-score img {
@@ -121,9 +122,14 @@ h1 span {
     transition: all 0.3s ease-in-out;
 }
 
-.btn-start:hover {
+.btn-start:hover, .btn-score:hover {
     box-shadow: 1px 5px 9px 0px rgba(0, 0, 0, 0.7);
     background-color: #85A737;
+}
+
+.btn-start:active, .btn-score:active {
+       transform: translateY(1px); /* Parece que se "hunde" 2px */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Sombra para efecto de hundido */
 }
 
 .score .stats {
@@ -132,7 +138,7 @@ h1 span {
     flex-direction: row;
     gap: 20px;
 }
-.score .actions-buttons {
+.actions-buttons {
     display: flex;
     gap: 20px;
 }
@@ -161,10 +167,6 @@ h1 span {
     width: 100%;
     height: 100vh;
     z-index: 1000;
-}
-
-.visible {
-    display: flex;
 }
 
 .winning-screen h2 {
@@ -204,4 +206,34 @@ h1 span {
     margin-top: 10px;
     border-radius: 50%;
     margin-bottom: 10px;
+}
+
+.paused-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.85);;
+    padding: 20px;
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1000;
+    font-size: 30px;
+}
+
+.paused-screen button {
+    font-size: 20px;
+}
+
+.paused-screen.visible {
+    display: flex;
+    gap: 20px;
+}
+
+.winning-screen.visible {
+    display: flex;
 }

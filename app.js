@@ -26,10 +26,12 @@ const timeElement = document.getElementById('time')
 const startButton = document.getElementById('start')
 const resetButton = document.getElementById('reset')
 const pauseButton = document.getElementById('pause')
-const resumeButton = document.getElementById('resume')
 const playAgainButton = document.getElementById('play-again')
 const statsElement = document.getElementById('stats')
 const winningScreen = document.getElementsByClassName('winning-screen')[0];
+const pausedScreen = document.querySelector('.paused-screen');
+const resetGameButton = document.getElementById('reset-game');
+const resumeGameButton = document.getElementById('resume-game');
 
 // -- Funciones de utilidad --
 
@@ -182,15 +184,12 @@ function startGame () { // Funcion para iniciar el juego
     startTimer() // Iniciar el marcador de tiempo
 
     pauseButton.disabled = false // Habilitar el botón de pausa
-    resumeButton.disabled = false // Habilitar el botón de reanudar
     statsElement.classList.add('stats') // Añadir clase de estadísticas
     resetButton.classList.remove('display-none') // Mostrar el botón de reinicio
     pauseButton.classList.remove('display-none') // Mostrar el botón de pausa
-    resumeButton.classList.remove('display-none') // Mostrar el botón de reanudar
 }
 
 function resetGame () { // Funcion para reiniciar el marcador
-    gameState = {...INITIAL_GAME_STATE} // Reiniciar el estado del juego
     if (gameState.timerId) {
         clearInterval(gameState.timerId) // Limpiar el intervalo del marcador de tiempo
         gameState.timerId = null // Reiniciar el ID del temporizador
@@ -198,17 +197,23 @@ function resetGame () { // Funcion para reiniciar el marcador
     if (gameState.gameEnded) {
         winningScreen.classList.remove('visible'); // Ocultar la pantalla de victoria
     }
+
+    gameState = {...INITIAL_GAME_STATE} // Reiniciar el estado del juego
+
     board.innerHTML = '' // Limpiar el tablero
     startButton.disabled = false // Habilitar el botón de inicio
+    startButton.classList.remove('display-none') // Mostrar el botón de inicio
+
     pauseButton.disabled = true // Deshabilitar el botón de pausa
-    resumeButton.disabled = true // Deshabilitar el botón de reanudar
+    pauseButton.classList.add('display-none') // Ocultar el botón de pausa
+    
+
     boardAttempts.textContent = 0 // Reiniciar el marcador de intentos
     timeElement.textContent = 0 // Reiniciar el marcador de tiempo
-    startButton.classList.remove('display-none') // Mostrar el botón de inicio
-    pauseButton.classList.add('display-none') // Ocultar el botón de pausa
-    resumeButton.classList.add('display-none') // Ocultar el botón de reanudar
     resetButton.classList.add('display-none') // Ocultar el botón de reinicio
     statsElement.classList.remove('stats') // Eliminar clase de estadísticas
+    
+    gameState.isPaused = false // Marcar el juego como no pausado
 }
 
 function pauseGame () { // Funcion para pausar el juego
@@ -217,9 +222,10 @@ function pauseGame () { // Funcion para pausar el juego
         gameState.isPaused = true // Marcar el juego como pausado
         gameState.timerId = null // Reiniciar el ID del temporizador
         pauseButton.disabled = true // Deshabilitar el botón de pausa para evitar múltiples pausas
-        resumeButton.disabled = false // Habilitar el botón de reanudar
         resetButton.disabled = false // Habilitar el botón de inicio para reiniciar el juego
         console.log('Juego pausado')
+        // Mostrar la pantalla de pausa
+        pausedScreen.classList.add('visible');
     }
 }
 
@@ -228,7 +234,7 @@ function resumeGame () { // Funcion para reanudar el juego
         startTimer()
         gameState.isPaused = false // Marcar el juego como no pausado
         pauseButton.disabled = false // Habilitar el botón de pausa
-        resumeButton.disabled = true // Deshabilitar el botón de reanudar para evitar múltiples reanudaciones
+        pausedScreen.classList.remove('visible') // Ocultar la pantalla de pausa
     }
 }
 
@@ -249,16 +255,21 @@ startButton.addEventListener('click', () => {
     }
 })
 
-resumeButton.addEventListener('click', () => {
-    resumeGame()
-})
-
 playAgainButton.addEventListener('click', () => {
     const winningScreen = document.getElementsByClassName('winning-screen')[0];
     winningScreen.classList.remove('visible');
     startGame();
 });
 
+resetGameButton.addEventListener('click', () => {
+    resetGame();    // Reiniciar el juego al hacer clic en el botón de reinicio 
+    startGame(); // Iniciar un nuevo juego
+    pausedScreen.classList.remove('visible'); // Ocultar la pantalla de pausa
+})
+
+resumeGameButton.addEventListener('click', () => {
+    resumeGame(); // Reanudar el juego al hacer clic en el botón de reanudar
+})
 
 // Actualmente tengo 241 lineas de código, puede reducir el código eliminando comentarios innecesarios 
 // o simplificando funciones, pero es importante mantener la claridad y legibilidad del código.

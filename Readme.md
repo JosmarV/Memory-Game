@@ -3,13 +3,13 @@
 To Do
 Lista de Tareas del Proyecto
 ✅ Tareas Completadas
-    1. Mostrar/ocultar contenido de las cartas ✓
-    2. Lógica de detección de pares abiertos ✓
-    3. Detección de victoria (todas las cartas emparejadas) ✓
-    4. Panel de estadísticas (intentos, puntos, tiempo básico) ✓
-    5. Botones de control (reinicio y pausa) ✓
-    6. Pantalla de victoria (básica) ✓
-    7. Corregir bug al reanudar el juego ✓
+1. Mostrar/ocultar contenido de las cartas ✓
+2. Lógica de detección de pares abiertos ✓
+3. Detección de victoria (todas las cartas emparejadas) ✓
+4. Panel de estadísticas (intentos, puntos, tiempo básico) ✓
+5. Botones de control (reinicio y pausa) ✓
+6. Pantalla de victoria (básica) ✓
+7. Corregir bug al reanudar el juego ✓
 
 📝 Tareas Pendientes
 🎨 Interfaz y Experiencia de Usuario
@@ -40,20 +40,16 @@ Lista de Tareas del Proyecto
 12. Formato de tiempo (HH:MM:SS)
     * Usar new Date(tiempoEnMilisegundos).toISOString().substr(11, 8) para conversión.
 
-13. Diseño responsive
-    * Evitar desbordamientos (overflow: hidden en contenedores).
-
 🔧 Mejoras Técnicas
-14. Optimizar código
+13. Optimizar código
     * Modularizar funciones (ej: gameLogic.js, uiControls.js).
     * Usar clases o componentes reutilizables para cartas.
 
 🧪 Testing y Validación (Nueva Sección)
-15. Pruebas de compatibilidad
-
+14. Pruebas de compatibilidad
     * Verificar funcionamiento en Chrome, Firefox, Safari y móviles (iOS/Android).
 
-16. Pruebas de rendimiento
+15. Pruebas de rendimiento
 
     * Medir carga de imágenes (Lighthouse en DevTools).
     * Optimizar memoria (evitar setInterval sin limpiar).

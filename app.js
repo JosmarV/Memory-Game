@@ -225,7 +225,10 @@ function pauseGame () { // Funcion para pausar el juego
         resetButton.disabled = false // Habilitar el botón de inicio para reiniciar el juego
         console.log('Juego pausado')
         // Mostrar la pantalla de pausa
-        pausedScreen.classList.add('visible');
+        if (!gameState.gameEnded) {
+            pausedScreen.classList.add('visible');
+        }
+        
     }
 }
 
@@ -271,5 +274,5 @@ resumeGameButton.addEventListener('click', () => {
     resumeGame(); // Reanudar el juego al hacer clic en el botón de reanudar
 })
 
-// Actualmente tengo 241 lineas de código, puede reducir el código eliminando comentarios innecesarios 
+// Actualmente tengo 274 lineas de código, puede reducir el código eliminando comentarios innecesarios 
 // o simplificando funciones, pero es importante mantener la claridad y legibilidad del código.

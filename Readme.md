@@ -1,27 +1,63 @@
 ## Memory Game
 
 To Do
+Lista de Tareas del Proyecto
+✅ Tareas Completadas
+    1. Mostrar/ocultar contenido de las cartas ✓
+    2. Lógica de detección de pares abiertos ✓
+    3. Detección de victoria (todas las cartas emparejadas) ✓
+    4. Panel de estadísticas (intentos, puntos, tiempo básico) ✓
+    5. Botones de control (reinicio y pausa) ✓
+    6. Pantalla de victoria (básica) ✓
+    7. Corregir bug al reanudar el juego ✓
 
-1. mostrar y ocultar contenido de la carta*
-2. crear las reglas del juego para que detecte cuando hay dos pares abierto y cuando no*
-3. que el juego detecte cuando todas las cartas fueron emparejadas *
-4. crear panel de estadisticas (intentos, puntos, tiempo) *
-5. crar boton reinicio y de pausa *
-6. colocar pantalla de victoria *
-7. mejorar interactividad
-8. Mejorar graficos (cer porque las imagenes no se mustran con la mejor resolución)
-9. Añadir música
-10. mejorar escalabilidad
-11. que el tiempo se muestre en horas minutos y segundos
-12. hay un error al renaudar el juego luego de haber pausado porque aunque detiene el tiempo y no deja interactuar cuando esta pausado a la hora de renaudar el juego simplemente lo reinicia*
-13. Que el titulo comience en el medio junto con el boton de play que debera ser un poco mas grande, luego al darle play el titulo con una animacion se ubicara arriba en el centro con la fuente un poco mas pequeña
-14. que pueda escoger que tipo de imagnes quiere para las cartas
+📝 Tareas Pendientes
+🎨 Interfaz y Experiencia de Usuario
+8. Mejorar interactividad
 
+    * Efectos al hacer hover/click en cartas.
+    * Feedback visual al encontrar pares (ej: animación de "match").
+
+9. Optimizar gráficos
+
+    * Redimensionar imágenes para evitar pixelación (usar image-rendering: crisp-edges en CSS).
+    * Animación de título y botón de inicio
+    * Título centrado al inicio + botón "Play" grande (ej: transform: scale(1.2)).
+    * Transición suave al mover título arriba y reducir tamaño (transition en CSS).
+
+⚙️ Funcionalidades
+10. Sistema de audio
+
+    * Música de fondo (usar Howler.js o <audio> loop).
+    * Efectos de sonido (voltear carta, match, victoria).
+
+11. Selector de temas
+
+    * Menú desplegable para elegir imágenes (ej: animales, frutas, etc.).
+    * Cargar dinámicamente archivos JSON con rutas de imágenes.
+
+📱 Responsive y Escalabilidad
+12. Formato de tiempo (HH:MM:SS)
+    * Usar new Date(tiempoEnMilisegundos).toISOString().substr(11, 8) para conversión.
+
+13. Diseño responsive
+    * Evitar desbordamientos (overflow: hidden en contenedores).
+
+🔧 Mejoras Técnicas
+14. Optimizar código
+    * Modularizar funciones (ej: gameLogic.js, uiControls.js).
+    * Usar clases o componentes reutilizables para cartas.
+
+🧪 Testing y Validación (Nueva Sección)
+15. Pruebas de compatibilidad
+
+    * Verificar funcionamiento en Chrome, Firefox, Safari y móviles (iOS/Android).
+
+16. Pruebas de rendimiento
+
+    * Medir carga de imágenes (Lighthouse en DevTools).
+    * Optimizar memoria (evitar setInterval sin limpiar).
 
 
 Nota
 Pregunta de diseño: Para proyectos más grandes, ¿qué alternativas existen para manejar el estado (isProcessing, allElements, etc.) sin que sean globales? Esto es algo para pensar a futuro, cuando quieres escalar tu aplicación o tener un control más estricto del flujo de datos. 
-
-
-doing
-estoy dandole funcionalidad a los botones de play, pausa y reinicio

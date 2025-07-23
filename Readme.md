@@ -2,7 +2,7 @@
 
 To Do
 Lista de Tareas del Proyecto
-✅ Tareas Completadas
+✅ Tareas Completadas  
 1. Mostrar/ocultar contenido de las cartas ✓
 2. Lógica de detección de pares abiertos ✓
 3. Detección de victoria (todas las cartas emparejadas) ✓
@@ -15,20 +15,23 @@ Lista de Tareas del Proyecto
 🎨 Interfaz y Experiencia de Usuario
 8. Mejorar interactividad
 
-    * Efectos al hacer hover/click en cartas.
     * Feedback visual al encontrar pares (ej: animación de "match").
+    * boton de inicio
 
 9. Optimizar gráficos
 
-    * Redimensionar imágenes para evitar pixelación (usar image-rendering: crisp-edges en CSS).
+    * Redimensionar imágenes para evitar pixelación (usar image-rendering: crisp-edges en CSS). ✓
     * Animación de título y botón de inicio
     * Título centrado al inicio + botón "Play" grande (ej: transform: scale(1.2)).
     * Transición suave al mover título arriba y reducir tamaño (transition en CSS).
+    * En movil mejorar la disposicion de las cartas 
+    * Asegurarse que la pantalla de carga cargue la pantalla completa si el jugador ha hecho scroll que devulva hacia 
+    arriba primero y luego mostrar pantalla de carga y bloque el scroll
 
 ⚙️ Funcionalidades
-10. Sistema de audio
+10. Sistema de audio 
 
-    * Música de fondo (usar Howler.js o <audio> loop).
+    * Música de fondo (usar Howler.js o <audio> loop). ✓
     * Efectos de sonido (voltear carta, match, victoria).
 
 11. Selector de temas

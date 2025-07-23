@@ -101,6 +101,14 @@ h1 span {
     border-radius: 6px;
     display: block; /* Removes extra space below images */
     object-fit: cover; /* or contain, depending on desired fit */
+    image-rendering: optimizeQuality;
+    transform: translateZ(0);
+    transition: transform 0.3s ease-out;
+}
+
+.card:hover > .front {
+    transform: scale(1.05) translateZ(1px);
+    filter: blur(0.2px); /* Opcional: desenfoque mínimo para suavizar */
 }
 
 .score {
@@ -281,6 +289,11 @@ h1 span {
 
 #attempts, #time {
     font-weight: 500;
+}
+
+.no-sounding {
+    background-color: #667742;
+    color: white;
 }
 
 /* Media Queries for Responsive Design */

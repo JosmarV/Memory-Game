@@ -32,6 +32,14 @@ const winningScreen = document.getElementsByClassName('winning-screen')[0];
 const pausedScreen = document.querySelector('.paused-screen');
 const resetGameButton = document.getElementById('reset-game');
 const resumeGameButton = document.getElementById('resume-game');
+const soundButton = document.getElementById('sound');
+const bgMusic = new Howl({
+  src: ['assets/Snowy.mp3'],
+  loop: true,
+  html5: true,
+  pool: 1,
+  volume: 0.5 
+});
 
 // -- Funciones de utilidad --
 
@@ -187,6 +195,7 @@ function startGame () { // Funcion para iniciar el juego
     statsElement.classList.add('stats') // Añadir clase de estadísticas
     resetButton.classList.remove('display-none') // Mostrar el botón de reinicio
     pauseButton.classList.remove('display-none') // Mostrar el botón de pausa
+    soundButton.classList.remove('display-none') // Mostrar el botón de sonido
 }
 
 function resetGame () { // Funcion para reiniciar el marcador
@@ -255,6 +264,8 @@ pauseButton.addEventListener('click', () => {
 startButton.addEventListener('click', () => {
     if (!gameState.isProcessing) {
         startGame()
+        console.log('Música lista');
+        bgMusic.play();
     }
 })
 
@@ -274,5 +285,30 @@ resumeGameButton.addEventListener('click', () => {
     resumeGame(); // Reanudar el juego al hacer clic en el botón de reanudar
 })
 
-// Actualmente tengo 274 lineas de código, puede reducir el código eliminando comentarios innecesarios 
+soundButton.addEventListener('click', () => {
+    if (bgMusic.playing()) {
+        bgMusic.pause(); // Pausar la música si ya está sonando
+        soundButton.title = 'Activar Sonido'; // Cambiar el texto del botón
+        soundButton.classList.add('no-sounding');
+    } else {
+        bgMusic.play(); // Reproducir la música si está pausada
+        soundButton.title = 'Desactivar Sonido'; // Cambiar el texto del botón
+        soundButton.classList.remove('no-sounding');
+    }
+});
+
+
+/* Sonidos del Juego */
+
+// Manejo de errores
+bgMusic.on('loaderror', () => {
+  console.error('Error al cargar la música');
+});
+
+// Limpiar al salir de la página
+window.addEventListener('beforeunload', () => {
+  Howler.unload();
+});
+
+// Actualmente tengo 281 lineas de código, puede reducir el código eliminando comentarios innecesarios 
 // o simplificando funciones, pero es importante mantener la claridad y legibilidad del código.

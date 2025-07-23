@@ -34,12 +34,22 @@ const resetGameButton = document.getElementById('reset-game');
 const resumeGameButton = document.getElementById('resume-game');
 const soundButton = document.getElementById('sound');
 const bgMusic = new Howl({
-  src: ['assets/Snowy.mp3'],
+  src: ['assets/jazz-music-whiskey-bar-restaurant-casino-background-intro-theme-263181.mp3'],
   loop: true,
   html5: true,
   pool: 1,
-  volume: 0.5 
+  volume: 0.2
 });
+const sfx = {
+    flipCard: new Howl({
+        src: ['assets/flipping-card-amplify.mp3'],
+        volume: 0.2
+    }),
+    matchCard: new Howl({
+        src: ['assets/shine-11-268907.mp3'],
+        volume: 0.5
+    })
+}
 
 // -- Funciones de utilidad --
 
@@ -109,7 +119,7 @@ function handleClick (event) { // Evento click en cartas
     }
     updateAttempts() // Actualizar marcador
     const currentlyRotated = identifyRotatedElements(allElements)
-
+    sfx.flipCard.play() // make sound when card is rotated
     if (currentlyRotated.length < 2){
         clickedCard.classList.add('rotate')
         const updatedRotatedElements = identifyRotatedElements(allElements)
@@ -137,12 +147,13 @@ function checkPairs (rotatedElements) { // Verificar pares
         const element2 = rotatedElements[1].querySelector('.back').children[0]
 
         if (element1 && element2) {
-            if (element1.alt === element2.alt) {
+            if (element1.alt === element2.alt) { // Par encontrado
                 console.log('par encontrado')
                 rotatedElements[0].classList.add('found')
                 rotatedElements[1].classList.add('found')
+                sfx.matchCard.play()
             }
-            else {
+            else { // No encontrado
                 console.log('sigue buscando')
                 gameState.isProcessing = true
                 setTimeout(() => {
